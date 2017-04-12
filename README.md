@@ -1,6 +1,11 @@
 # OL-Save_Attachments
 VBA Script to save attachments to local storage and remove them from emails to save space in the mailbox
 
+## Still has a few bugs!
+
+Doesn't save / remove all attchments when there are more than one on a message.
+
+## Description
 This little VBA script will iterate through a set of selected messages saving each attachment to a folder corresponding to the conversation topic, subject, or "Uncategorized". It will delete the attachments from the mail message and insert links into the message indicating where the attachment has been saved.
 
 Attachments are stored in folder under a folder named "EmailAttachments" in your documents folder. If you want to store them someplace else change the line of code below.
