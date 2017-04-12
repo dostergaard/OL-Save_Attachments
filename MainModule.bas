@@ -33,7 +33,12 @@ Public Sub SaveAllAttachments()
     Set objSelection = objOLapp.ActiveExplorer.Selection
     strBasePath = CreateObject("WScript.Shell").SpecialFolders(16) & "\EmailAttachments\"
 
+    Dim dbgCounter As Integer: dbgCounter = 0
+    Debug.Print "objSelection.Count = " & objSelection.Count
+
     For Each Item In objSelection
+        dbgCounter = dbgCounter + 1
+        Debug.Print "Processing item #" & dbgCounter
         If TypeOf Item Is Outlook.MailItem Then
             Dim oMail As Outlook.MailItem: Set oMail = Item
             If oMail.Attachments.Count > 0 Then
@@ -41,14 +46,18 @@ Public Sub SaveAllAttachments()
                 ' screwed up when you delete an attachment
                 For i = oMail.Attachments.Count To 1 Step -1
                     Set attItem = oMail.Attachments.Item(i)
+                    Debug.Print "oMail.Attachments.Count = " & oMail.Attachments.Count, "i = " & i, "attItem Display Name = " & attItem.DisplayName
                     If attItem.Type <> olOLE And Left(attItem.DisplayName, 5) <> "image" Then
                         strSavedFile = SaveAttachment(attItem, strBasePath)
                         AnnotateMessage oMail, strSavedFile
                         Debug.Print strSavedFile
                         attItem.Delete
+                        Debug.Print "After delete. Attachment count is now " & oMail.Attachments.Count
                     End If
+                    Set attItem = Nothing ' Attempting to solve the won't delete first attachment of next message bug
                 Next i
             End If
+            Set oMail = Nothing ' Attempting to solve the won't delete first attachment of next message bug
         End If
     Next
 
